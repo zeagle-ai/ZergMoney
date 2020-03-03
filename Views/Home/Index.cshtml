@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("TextRead", "TR", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input name="imagePath" />
+    <button type="submit" class="btn btn-primary">Submit</button>
+}

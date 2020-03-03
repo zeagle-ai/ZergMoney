@@ -1,0 +1,26 @@
+.mdc-linear-progress {
+  &.mdc-linear-progress--custom {
+    // .mdc-linear-progress__buffer {
+    //   background-color: rgba($mdc-theme-secondary, .2);
+    // }
+    // .mdc-linear-progress__bar-inner {
+    //   background-color: $mdc-theme-secondary;
+    // }
+    // .mdc-linear-progress__buffering-dots {
+    //   opacity: .5;
+    // }
+  }
+  @each $color, $value in $theme-colors {
+    &.mdc-linear-progress--#{$color} {
+      .mdc-linear-progress__buffer {
+        background-color: rgba($value, .2);
+      }
+      .mdc-linear-progress__bar-inner {
+        background-color: $value;
+      }
+      .mdc-linear-progress__buffering-dots {
+        opacity: .5;
+      }
+    }
+  }
+}

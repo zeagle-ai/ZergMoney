@@ -1,0 +1,13 @@
+.mdc-slider {
+  @include mdc-slider-color-accessible(primary);
+  @each $color, $value in $theme-colors {
+    &.mdc-slider--#{$color} {
+      @include mdc-slider-color-accessible($value);
+    }
+  }
+  &.mdc-slider--custom {
+    @include mdc-slider-color-accessible(orange);
+    @include mdc-slider-highlight-color(#ff00a5);
+    @include mdc-slider-rail-color(#ff00a5, .1)
+  }
+}

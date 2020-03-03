@@ -1,0 +1,65 @@
+/* === Import template variables === */
+@import "./variables";
+@import "material-components-web/material-components-web";
+
+
+/* === SCSS Compass Functions === */
+@import "../node_modules/compass-mixins/lib/compass";
+@import "../node_modules/compass-mixins/lib/animate";
+
+
+/* === Template mixins === */
+@import "../shared/mixins/buttons";
+@import "../shared/mixins/color";
+@import "../shared/mixins/no-ui-slider";
+
+/* === Core Styles === */
+@import "../shared/reset";
+@import "../shared/fonts";
+@import "../shared/functions";
+@import "../shared/typography";
+@import "../shared/theme";
+@import "../shared/utilities";
+@import "../shared/demo";
+
+
+/* === Components === */
+@import "../shared/components/buttons";
+@import "../shared/components/badges";
+@import "../shared/components/cards";
+@import "../shared/components/checkbox";
+@import "../shared/components/dialog";
+@import "../shared/components/forms";
+@import "../shared/components/loaders/loaders";
+@import "../shared/components/menu";
+@import "../shared/components/pagination";
+@import "../shared/components/progressbar";
+@import "../shared/components/slider";
+@import "../shared/components/select";
+@import "../shared/components/switch";
+@import "../shared/components/tables";
+@import "../shared/components/tabs";
+@import "../shared/components/textfield";
+
+/* === Sample screens === */
+@import "../shared/sample-screens/email";
+@import "../shared/sample-screens/error";
+@import "../shared/sample-screens/auth";
+
+/* === Plugin Overides === */
+@import "../shared/components/plugin-overides/jquery-toast";
+@import "../shared/components/plugin-overides/sweet-alert";
+@import "../shared/components/plugin-overides/jquery.flot";
+@import "../shared/components/plugin-overides/code-mirror";
+@import "../shared/components/plugin-overides/datepicker";
+@import "../shared/components/plugin-overides/ratings";
+@import "../shared/components/plugin-overides/context-menu";
+@import "../shared/components/plugin-overides/no-ui-slider";
+
+
+@import './dashboard';
+@import './navbar';
+@import './sidebar';
+@import './footer';
+@import './layout';
+@import '../vertical/vertical-wrapper';

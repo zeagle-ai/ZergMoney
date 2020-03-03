@@ -1,0 +1,199 @@
+.email-sidebar {
+  border-right: 1px solid $border-color;
+  padding-right: 18px;
+  @media (max-width: 991px) {
+    border-right: none;
+    padding-right: 0;
+    display: none;
+  }
+  .button-compose {
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    height: 46px;
+  }
+  .mail-components {
+    .mdc-list {
+      .mdc-list-item {
+        .mdc-list-item__graphic {
+          i {
+            color: #000;
+          }
+        }
+        .mdc-list-item__text {
+          color: #000;
+          font-size: 14px;
+        }
+        .count-indicator {
+          margin-left: auto;
+          @include display-flex;
+          @include align-items(center);
+          @include justify-content(center);
+          width: 20px;
+          height: 20px;
+          border-radius: 20px;
+          background-color: $mdc-theme-secondary;
+          .count {
+            font-size: 12px;
+            color: #fff;
+            font-weight: bold;
+          }
+        }
+        &.active {
+          .mdc-list-item__graphic {
+            i {
+              color: $mdc-theme-primary;
+            }
+          }
+          .mdc-list-item__text {
+            color: $mdc-theme-primary;
+          }
+          &::before {
+            background-color: #000;
+            opacity: .04;
+          }
+        }
+      }
+      &:not(.mdc-list--two-line) {
+        .mdc-list-item {
+          height: 43px;
+          .mdc-list-item__graphic {
+            i {
+              font-size: 22px;;
+            }
+          }
+        }
+      }
+      &:not(.chat-list) {
+        .mdc-list-item {
+          .mdc-list-item__graphic {
+            margin-right: 12px;
+          }
+        }
+      }
+      &.chat-list {
+        .mdc-list-item {
+          height: 68px;
+          .mdc-list-item__graphic {
+            img {
+              width: 32px;
+              height: 32px;
+              border-radius: 32px;
+            }
+          }
+          .mdc-list-item__text {
+            @include align-self(center);
+          }
+        }
+      }
+    }
+    .status-wrapper {
+      @include display-flex;
+      @include align-items(center);
+      @include justify-content(space-between);
+      margin-bottom: 10px;
+      margin-top: 30px;
+      h4 {
+        font-weight: normal;
+        font-size: 16px;
+      }
+      .status-indicator {
+        @include display-flex;
+        @include align-items(center);
+        @include justify-content(space-between);
+        font-size: 12px;
+        .status {
+          display: block;
+          width: 10px;
+          height: 10px;
+          border-radius: 10px;
+          margin-right: 7px;
+          background-color: $mdc-theme-primary;
+          &.status-online {
+            background-color: theme-color(success);
+          }
+        }
+      }
+    }
+  }
+}
+
+.email-right-wrapper {
+  .email-search {
+    margin-bottom: 10px;
+    margin: 0;
+  }
+  .mdc-list {
+    &.email-list {
+      .mdc-list-item {
+        &.active {
+          &::before {
+            background-color: #000;
+            opacity: .04;
+          }
+        }
+        .mdc-list-item__text {
+          @include align-self(center);
+          color: #000;
+          font-size: 14px;
+          padding-left: 5px;
+        }
+        .material-icons {
+          color: #000;
+        }
+      }
+    }
+  }
+  .message-sender-details {
+    padding: 35px 0 30px 0;
+    border-bottom: 1px solid $border-color;
+    .avatar {
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 40px;
+      }
+    }
+    .details {
+      i {
+        font-size: 16px;
+      }
+    }
+  }
+  .message-content {
+    padding: 35px 10px;
+  }
+  .message-attachments {
+    padding: 30px 0 30px 0;
+    border-top: 1px solid $border-color;
+    ul {
+      display: flex;
+      padding-left: 15px;
+      flex-wrap: wrap;
+      li {
+        list-style: none;
+        display: flex;
+        padding: 15px 20px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        margin-right: 15px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        .thump {
+          i {
+            font-size: 40px;
+          }
+        }
+        .details {
+          p {
+            margin: 0 6px;
+          }
+          span {
+            padding: 0 10px 0 0;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+/* Pagination */
+
+.mdc-pagination {
+	list-style-type: none;
+	padding-left: 0;
+	li {
+		display: inline-block;
+		a {
+			min-width: auto;
+			width: 30px;
+			height: 30px;
+			line-height: 1;
+			padding: .5rem;
+			&.active {
+				@extend .mdc-button--raised;
+			}
+		}
+	}
+	@each $color, $value in $theme-colors {
+		&.mdc-pagination--#{$color} {
+			li {
+				a {
+					@extend .text-button--#{$color};
+					&.active {
+						@extend .filled-button--#{$color};
+					}
+				}
+			}
+		}
+	}
+	&.mdc-pagination--rounded {
+		li {
+			a {
+				border-radius: 50px;
+			}
+		}
+	}
+}

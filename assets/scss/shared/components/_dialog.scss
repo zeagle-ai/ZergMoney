@@ -1,0 +1,23 @@
+.mdc-dialog {
+  .mdc-dialog__container {
+    .mdc-dialog__surface {
+      -webkit-box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.05), 0px 8px 10px 1px rgba(0, 0, 0, 0.05), 0px 3px 14px 2px rgba(0, 0, 0, 0.05);
+      box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.05), 0px 8px 10px 1px rgba(0, 0, 0, 0.05), 0px 3px 14px 2px rgba(0, 0, 0, 0.05);
+      header {
+        padding: 0 40px 9px;
+      }
+      .mdc-dialog__title {
+        &::before {
+          height: 25px;
+        }
+      }
+      .mdc-dialog__content {
+        padding: 20px 40px;
+      }
+      footer {
+        padding: 8px 40px 30px 40px;
+      }
+    }
+  }
+}
+
