@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ZergMoney.Helpers;
 using ZergMoney.Models;
 
 namespace ZergMoney.Controllers
@@ -111,6 +114,47 @@ namespace ZergMoney.Controllers
                 return HttpNotFound();
             }
             return View(invite);
+        }
+
+        public ActionResult Invite()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult> Invite(string email)
+        {
+            var code = Guid.NewGuid();
+            var callbackUrl = Url.Action("CreateJoinHousehold", "Home", new { code = code }, protocol: Request.Url.Scheme);
+            
+            EmailService ems = new EmailService();
+            IdentityMessage msg = new IdentityMessage();
+            
+            msg.Body = "Please join my household.... And bring ALL of your money!!!" + Environment.NewLine + "Please click the following link to join <a href=\"" + callbackUrl + "\">JOIN</a>";
+            msg.Destination = email;
+            msg.Subject = "Invite to Household";
+            
+            await ems.SendMailAsync(msg);
+            
+            //Create record in the Invites table
+            Invite model = new Invite();
+            model.Email = email;
+            model.HHToken = code;
+            model.HouseholdId = User.Identity.GetHouseholdId().Value;
+            model.InviteDate = DateTime.Now;
+            model.InvitedById = User.Identity.GetUserId();
+            
+            db.Invites.Add(model);
+            db.SaveChanges();
+            
+            return RedirectToAction("Index", "Home");
+        }
+        
+        public ActionResult Leavehousehold()
+        {
+            Household model = db.Households.Find(User.Identity.GetHouseholdId().Value);
+            
+            return View(model);
         }
 
         // POST: Invites/Delete/5

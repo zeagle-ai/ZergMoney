@@ -55,11 +55,6 @@ namespace ZergMoney.Controllers
         {
             if (ModelState.IsValid)
             {
-                TR trC = new TR();
-                var resultC = trC.ReadText(imagePath);
-
-                resultC.GetType();
-
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -68,7 +63,7 @@ namespace ZergMoney.Controllers
             TR tr = new TR();
             var result = tr.ReadText(imagePath).Text;
 
-            var DTTotal = tr.FindDateTotal(result);
+            var DTTotal = tr.Scan(result);
             var date = DTTotal[0];
             var total = DTTotal[1];
 

@@ -13,12 +13,12 @@ namespace ZergMoney.Helper
         {
             var Ocr = new AdvancedOcr()
             {
-                CleanBackgroundNoise = true,
+                CleanBackgroundNoise = false,
                 EnhanceContrast = false,
                 EnhanceResolution = false,
                 Language = IronOcr.Languages.English.OcrLanguagePack,
-                Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
-                ColorSpace = AdvancedOcr.OcrColorSpace.Color,
+                Strategy = IronOcr.AdvancedOcr.OcrStrategy.Fast,
+                ColorSpace = AdvancedOcr.OcrColorSpace.GrayScale,
                 DetectWhiteTextOnDarkBackgrounds = false,
                 InputImageType = AdvancedOcr.InputTypes.AutoDetect,
                 RotateAndStraighten = true,
@@ -31,7 +31,7 @@ namespace ZergMoney.Helper
             return (result);
         }
 
-        public string[] FindDateTotal(string textGroup)
+        public string[] Scan(string textGroup)
         {
             string date = @"(0?[1-9]|1[0-2])[\/](0?[1-9]|[12]\d|3[01])[\/](19|20)\d{2}";
             string date1 = @"(0?[1-9]|1[0-2])[\-](0?[1-9]|[12]\d|3[01])[\-](19|20)\d{2}";
@@ -39,7 +39,17 @@ namespace ZergMoney.Helper
             Match FoundDate = Regex.Match(textGroup, date);
             Match FoundDate1 = Regex.Match(textGroup, date1);
             Match FoundTotal = Regex.Match(textGroup, total);
+
+            bool IsDeposit = textGroup.IndexOf("deposit", StringComparison.OrdinalIgnoreCase) >= 0;
             var listOfDTT = new List<string>();
+            if (IsDeposit)
+            {
+                listOfDTT.Add("true");
+            }
+            else
+            {
+                listOfDTT.Add("false");
+            }
             if(FoundDate != null)
             {
                 var addedDate = FoundDate.ToString();
