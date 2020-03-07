@@ -125,25 +125,28 @@ namespace ZergMoney.Controllers
         public async Task<ActionResult> Invite(string email)
         {
             var code = Guid.NewGuid();
-            var callbackUrl = Url.Action("CreateJoinHousehold", "Home", new { code = code }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("CreateJoinHousehold", "Home", new { code }, protocol: Request.Url.Scheme);
             
             EmailService ems = new EmailService();
-            IdentityMessage msg = new IdentityMessage();
-            
-            msg.Body = "Please join my household.... And bring ALL of your money!!!" + Environment.NewLine + "Please click the following link to join <a href=\"" + callbackUrl + "\">JOIN</a>";
-            msg.Destination = email;
-            msg.Subject = "Invite to Household";
-            
+            IdentityMessage msg = new IdentityMessage
+            {
+                Body = "You are invited to join my household!!!" + Environment.NewLine + "Please click the following link to join <a href=\"" + callbackUrl + "\">JOIN</a>",
+                Destination = email,
+                Subject = "You are invited to join Zerg Money"
+            };
+
             await ems.SendMailAsync(msg);
-            
+
             //Create record in the Invites table
-            Invite model = new Invite();
-            model.Email = email;
-            model.HHToken = code;
-            model.HouseholdId = User.Identity.GetHouseholdId().Value;
-            model.InviteDate = DateTime.Now;
-            model.InvitedById = User.Identity.GetUserId();
-            
+            Invite model = new Invite
+            {
+                Email = email,
+                HHToken = code,
+                HouseholdId = User.Identity.GetHouseholdId().Value,
+                InviteDate = DateTime.Now,
+                InvitedById = User.Identity.GetUserId()
+            };
+
             db.Invites.Add(model);
             db.SaveChanges();
             

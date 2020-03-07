@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-using NYC_Budget.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +14,11 @@ namespace ZergMoney.Helpers
 {
     public static class HelperExtensions
     {
-        public static string GetName(this IIdentity user)
+        public static string GetFullName(this IIdentity user)
         {
             var ClaimsUser = (ClaimsIdentity)user;
-            var claim = ClaimsUser.Claims.FirstOrDefault(c => c.Type == "Name");
-            return claim != null ? claim.Value : null;
+            var claim = ClaimsUser.Claims.FirstOrDefault(c => c.Type == "FullName");
+            return claim?.Value;
         }
 
         public static int? GetHouseholdId(this IIdentity user)
@@ -46,12 +45,5 @@ namespace ZergMoney.Helpers
             await context.GetOwinContext().Get<ApplicationSignInManager>()
                 .SignInAsync(user, isPersistent: false, rememberBrowser: false);
         }
-
-        //public static bool In(this string source, params string[] list)
-        //{
-        //    if (null == source) throw new ArgumentNullException("source");
-        //    return list.Contains(source, StringComparer.OrdinalIgnoreCase);
-        //}
-
     }
 }

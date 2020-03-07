@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
-using NYC_Budget.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using ZergMoney.Helpers;
 
-namespace NYC_Budget.Models
+namespace ZergMoney.Models
 {
     public class AuthorizeHouseholdRequired : AuthorizeAttribute
     {

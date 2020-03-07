@@ -64,8 +64,10 @@ namespace ZergMoney.Controllers
             var result = tr.ReadText(imagePath).Text;
 
             var DTTotal = tr.Scan(result);
-            var date = DTTotal[0];
-            var total = DTTotal[1];
+            var dep = DTTotal[0];
+            var date = DTTotal[1];
+            var total = DTTotal[2];
+
 
             ViewBag.AccountId = new SelectList(db.PersonalAccounts, "Id", "Name", transaction.AccountId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);

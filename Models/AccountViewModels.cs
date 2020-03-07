@@ -64,6 +64,8 @@ namespace ZergMoney.Models
 
     public class RegisterViewModel
     {
+        internal string HHName;
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -75,10 +77,32 @@ namespace ZergMoney.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
+        [Required]
+        [StringLength(25, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(25, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [StringLength(25, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
+        [Display(Name = "Display Name")]
+        public string DisplayName { get; set; }
+
+        [Required]
+        [StringLength(25, ErrorMessage = "Household Name must be at least 6 characters long.", MinimumLength = 6)]
+        [Display(Name = "Household Name")]
+        public string HouseHoldName { get; set; }
+
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public int HHID { get; set; }
     }
 
     public class ResetPasswordViewModel

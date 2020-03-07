@@ -1,10 +1,19 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿@model ZergMoney.Models.Household
 
-@using (Html.BeginForm("TextRead", "TR", FormMethod.Post))
+@using (Html.BeginForm("Invite", "Invites", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
-    <input name="imagePath" />
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="mdc-text-field mdc-text-field--outlined">
+        <input class="mdc-text-field__input" id="text-field-hero-input" name="email">
+        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+            <div class="mdc-notched-outline__leading"></div>
+            <div class="mdc-notched-outline__notch" style="">
+                <label for="text-field-hero-input" class="mdc-floating-label" style="">Email</label>
+            </div>
+            <div class="mdc-notched-outline__trailing"></div>
+        </div>
+    </div>
+    <button class="mdc-button mdc-button--outlined mdc-ripple-upgraded">
+        <i class="material-icons mdc-button__icon">email</i>
+        Send
+    </button>
 }

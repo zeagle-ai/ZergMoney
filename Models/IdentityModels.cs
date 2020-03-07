@@ -34,8 +34,6 @@ namespace ZergMoney.Models
         public string DisplayName { get; set; }
         public int? HouseholdId { get; set; }
         public string InviteEmail { get; set; }
-        public bool HHCreator { get; set; }
-
         public virtual Household Household { get; set; }
         public virtual ICollection<Invite> Invites { get; set; }
         public virtual ICollection<PersonalAccount> Accounts { get; set; }

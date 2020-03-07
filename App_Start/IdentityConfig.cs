@@ -32,7 +32,7 @@ namespace ZergMoney
             var host = WebConfigurationManager.AppSettings["host"];
             int port = Convert.ToInt32(WebConfigurationManager.AppSettings["port"]);
 
-            var from = new MailAddress(WebConfigurationManager.AppSettings["emailfrom"], "My Blog");
+            var from = new MailAddress(WebConfigurationManager.AppSettings["emailfrom"], "Zerg Money");
 
             var email = new MailMessage(from, new MailAddress(message.Destination))
             {

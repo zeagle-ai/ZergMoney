@@ -223,7 +223,7 @@
     <Content Include="assets\images\faces\face8.jpg" />
     <Content Include="assets\images\faces\face9.jpg" />
     <Content Include="assets\images\favicon.png" />
-    <Content Include="assets\images\logo.svg" />
+    <Content Include="assets\images\logo.png" />
     <Content Include="assets\images\sidebar\sidebar-bg.jpg" />
     <Content Include="assets\js\chartjs.js" />
     <Content Include="assets\js\clipboard.js" />
@@ -980,6 +980,7 @@
     <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
+    <Content Include="Views\Account\InvRegister.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1015,7 +1016,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>64203</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44376/</IISUrl>
+          <IISUrl>https://localhost:44380/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

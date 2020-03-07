@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ZergMoney.Helpers;
@@ -13,9 +14,18 @@ namespace ZergMoney.Controllers
     {
         ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index()
-        {
-            return View();
+        public ActionResult Index(int? id)
+        { 
+            if (id == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            Household household = db.Households.Find(id);
+            if (household == null)
+            {
+                return HttpNotFound();
+            }
+            return View(household);
         }
 
         public ActionResult About()
@@ -51,16 +61,14 @@ namespace ZergMoney.Controllers
                     Invite result = db.Invites.FirstOrDefault(i => i.HHToken == code);
                     
                     vm.IsJoinHouse = true;
-                    vm.HHId = result.HouseholdId;
+                    vm.HHID = result.HouseholdId;
                     vm.HHName = result.Household.Name;
                     
-                    //Set USED flag to true for this invite
-                    
+                    //Set USED flag to true for this invite                  
                     result.HasBeenUsed = true;
-                    
-                    ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
-                    user.InviteEmail = result.Email;
                     db.SaveChanges();
+
+                    return RedirectToAction("InvRegister", "Account", new { HHID = vm.HHID });  
                 }
                 else
                 {

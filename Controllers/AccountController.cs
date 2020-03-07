@@ -2,12 +2,14 @@
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using ZergMoney.Helpers;
 using ZergMoney.Models;
 
 namespace ZergMoney.Controllers
@@ -17,6 +19,7 @@ namespace ZergMoney.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -57,8 +60,42 @@ namespace ZergMoney.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            string p = @"([a-z0-9]{8}[-][a-z0-9]{4}[-][a-z0-9]{4}[-][a-z0-9]{4}[-][a-z0-9]{12})";
+            
+            // Retrieve invite code from the returnUrl if it is provided
+            if (!string.IsNullOrEmpty(returnUrl) && returnUrl != "/")
+            {
+                // Parse "code" from the returnUrl string
+                MatchCollection mc = Regex.Matches(returnUrl, p);
+                Guid code = new Guid();
+                code = new Guid(mc.OfType<Match>().FirstOrDefault().ToString());
+                
+                // If the returnUrl contains a "code"
+                if (code != Guid.Empty)
+                {
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    
+                    // Find the Invite in the database based on the code, and access it's Email property
+                    string nvtEmail = db.Invites.FirstOrDefault(i => i.HHToken == code).Email;
+                    
+                    // Check to see if the email is associated with anyone in the Users table
+                    if (db.Users.Any(u => u.InviteEmail == nvtEmail))
+                    {
+                        // If so, then present them with the Login screen... they are already registered!
+                        ViewBag.ReturnUrl = returnUrl;
+                        return View();
+                    }
+                    else
+                    {
+                        // If not, then have the new user register.
+                        return RedirectToAction("Register", new { returnUrl });
+                    }
+                }
+            }
+
             ViewBag.ReturnUrl = returnUrl;
             return View();
+            
         }
 
         //
@@ -79,11 +116,12 @@ namespace ZergMoney.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    var id = UserManager.FindByEmail(model.Email).HouseholdId;
+                    return RedirectToAction("Index", "Home", new { id });
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -151,18 +189,62 @@ namespace ZergMoney.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, DisplayName = model.DisplayName };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    Household hh = new Household
+                    {
+                        Name = model.HouseHoldName
+                    };
+                    db.Households.Add(hh);
+                    db.SaveChanges();
+                    var userId = user.Id;
+                    var userses = db.Users.Find(userId);
+                    userses.HouseholdId = hh.Id;                    
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index", "Home", new { hh.Id });
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult InvRegister(int HHID)
+        {
+            RegisterViewModel model = new RegisterViewModel
+            {
+                HHID = HHID,
+                HHName = db.Households.Find(HHID).Name
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> InvRegister(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, DisplayName = model.DisplayName };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -314,7 +396,7 @@ namespace ZergMoney.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
         }
 
         //
