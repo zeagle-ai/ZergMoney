@@ -25,6 +25,8 @@ namespace ZergMoney.Controllers
             {
                 return HttpNotFound();
             }
+            household.Accounts = db.PersonalAccounts.Where(h => h.HouseholdId == id).ToList();
+            ViewBag.AccountsForHH = db.PersonalAccounts.Where(h => h.HouseholdId == id);
             return View(household);
         }
 

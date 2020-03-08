@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -49,13 +50,16 @@ namespace ZergMoney.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,HouseholdId,Name,Balance,ReconciledBalance,CreatedById,IsDeleted")] PersonalAccount personalAccount)
+        public ActionResult Create([Bind(Include = "Id,Name,InstitutionName,Balance")] PersonalAccount personalAccount, int HHID)
         {
             if (ModelState.IsValid)
             {
+                personalAccount.HouseholdId = HHID;
+                personalAccount.ReconciledBalance = personalAccount.Balance;
+                personalAccount.CreatedById = User.Identity.GetUserId();
                 db.PersonalAccounts.Add(personalAccount);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home", new { id = personalAccount.HouseholdId });
             }
 
             ViewBag.CreatedById = new SelectList(db.Users, "Id", "FirstName", personalAccount.CreatedById);

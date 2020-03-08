@@ -93,6 +93,7 @@ namespace ZergMoney.Models
         public int Id { get; set; }
         public int HouseholdId { get; set; }
         public string Name { get; set; }
+        public string InstitutionName { get; set; }
         public decimal Balance { get; set; }
         [Display(Name = "Reconciled Balance")]
         public decimal ReconciledBalance { get; set; }

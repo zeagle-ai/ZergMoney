@@ -898,9 +898,6 @@
     <Content Include="assets\vendors\mdi\fonts\materialdesignicons-webfont.ttf" />
     <Content Include="assets\vendors\mdi\fonts\materialdesignicons-webfont.woff" />
     <Content Include="assets\vendors\mdi\fonts\materialdesignicons-webfont.woff2" />
-    <Content Include="Uploads\MVC_pic.png" />
-    <Content Include="Uploads\test.jpg" />
-    <Content Include="Uploads\Zerg-Landing.png" />
     <Content Include="private.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -986,6 +983,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
