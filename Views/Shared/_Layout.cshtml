@@ -29,8 +29,11 @@
                 @Html.Partial("_LoginPartial")
             </header>
             <!-- partial -->
-
-            @RenderBody()
+            <div class="page-wrapper">
+                <main class="content-wrapper">
+                    @RenderBody()
+                </main>
+            </div>
             <!-- partial:partials/_footer.html -->
             <footer>
                 <div class="mdc-layout-grid">
@@ -51,6 +54,7 @@
             <!-- partial -->
         </div>
     </div>
+    <script src="~/assets/js/custom.js"></script>
     <!-- plugins:js -->
     <script src="~/assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
@@ -66,6 +70,7 @@
     <script src="~/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
     <script src="~/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script src="~/assets/vendors/jquery-bar-rating/jquery.barrating.min.js"></script>
+    <script src="~/assets/js/dialog.js"></script>
     <!-- End plugin js for this page-->
     <!-- inject:js -->
     <script src="~/assets/js/material.js"></script>

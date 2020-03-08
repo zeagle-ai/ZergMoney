@@ -184,6 +184,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\HelperExtensions.cs" />
+    <Compile Include="Helper\ImageUploadValidator.cs" />
     <Compile Include="Helper\TR.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -228,6 +229,7 @@
     <Content Include="assets\js\chartjs.js" />
     <Content Include="assets\js\clipboard.js" />
     <Content Include="assets\js\context-menu.js" />
+    <Content Include="assets\js\custom.js" />
     <Content Include="assets\js\dashboard.js" />
     <Content Include="assets\js\dialog.js" />
     <Content Include="assets\js\dragula.js" />

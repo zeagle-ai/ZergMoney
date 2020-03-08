@@ -1,19 +1,120 @@
 ﻿@model ZergMoney.Models.Household
 
-@using (Html.BeginForm("Invite", "Invites", FormMethod.Post))
-{
-    <div class="mdc-text-field mdc-text-field--outlined">
-        <input class="mdc-text-field__input" id="text-field-hero-input" name="email">
-        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
-            <div class="mdc-notched-outline__leading"></div>
-            <div class="mdc-notched-outline__notch" style="">
-                <label for="text-field-hero-input" class="mdc-floating-label" style="">Email</label>
+<div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-8-tablet">
+            <div class="mdc-card p-0 to-do-list">
+                <h6 class="card-title card-padding pb-0">Accounts</h6>
+                <div class="content content--active">
+                    <div class="to-do-list-content">
+                        <div class="to-do-list-item">
+                            <div class="ml-3">
+                                <h5 class="mb-0 font-weight-medium">Checking</h5>
+                                <p class="tx-12 text-muted mb-0">FSNB</p>
+                            </div>
+                            <div class="ml-auto mr-3">
+                                $ 7,000.00
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 10px; margin-bottom: 50px">
+                            <div class="menu-button-container" style="float: right">
+                                <button class="mdc-button mdc-menu-button icon-button mdc-button--raised mdc-ripple-upgraded" style="float: right; margin-top: 5px">
+                                    <i class="material-icons mdc-button__icon">add</i>
+                                </button>
+                                <div class="mdc-menu mdc-menu-surface" tabindex="-1" id="demo-menu" style="transform-origin: left bottom; left: 0px; bottom: 36px; max-height: 749px;">
+                                    <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical">
+                                        <li class="mdc-list-item" role="menuitem" tabindex="-1">
+                                            <a data-toggle="dialog" target-dialog="mdc-dialog-default"><h6 class="item-subject font-weight-normal">Add Transaction</h6></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <button class="mdc-button mdc-ripple-upgraded" style="float: right; margin-top: 5px">SEE ALL</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mdc-notched-outline__trailing"></div>
+        </div>
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-8-tablet">
+            <div class="mdc-card p-0 to-do-list">
+                <h6 class="card-title card-padding pb-0">Bills</h6>
+                <div class="content content--active">
+                    <div class="to-do-list-content">
+                        <div class="to-do-list-item">
+                            <div class="ml-3">
+                                <h5 class="mb-0 font-weight-medium">House Payment</h5>
+                                <p class="tx-12 text-muted mb-0">Conrex</p>
+                            </div>
+                            <div class="ml-auto mr-3">
+                                $ 1625.00
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 10px; margin-bottom: 50px">
+                            <button class="mdc-button icon-button mdc-button--raised mdc-ripple-upgraded" style="float: right; margin-top: 5px">
+                                <i class="material-icons mdc-button__icon">add</i>
+                            </button>
+                            <button class="mdc-button mdc-ripple-upgraded" style="float: right; margin-top: 5px">SEE ALL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-8-tablet">
+            <div class="mdc-card">
+                <h6 class="card-title">Members</h6>
+                <h6 class="card-sub-title">Invite Member</h6>
+                @using (Html.BeginForm("Invite", "Invites", FormMethod.Post))
+                {
+                    <div class="mdc-text-field mdc-text-field--outlined">
+                        <input class="mdc-text-field__input" id="text-field-hero-input" name="email">
+                        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch" style="">
+                                <label for="text-field-hero-input" class="mdc-floating-label" style="">Email</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
+                    <button class="mdc-button mdc-button--raised mdc-ripple-upgraded" style="float: right; margin-top: 22px">
+                        <i class="material-icons mdc-button__icon">email</i>
+                        Send
+                    </button>
+                }
+                <h6 class="card-sub-title">Current Members</h6>
+            </div>
         </div>
     </div>
-    <button class="mdc-button mdc-button--outlined mdc-ripple-upgraded">
-        <i class="material-icons mdc-button__icon">email</i>
-        Send
-    </button>
-}
+</div>
+
+<div id="mdc-dialog-default" class="mdc-dialog" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">
+    <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+            <header class="mdc-dialog__title">
+                <h3 id="mdc-dialog-default-label" class="mdc-dialog__header__title">
+                    Select Account and Add Transaction
+                </h3>
+            </header>
+            <section id="mdc-dialog-default-description" class="mdc-dialog__content">
+                Select the correct account, then choose Withdrawal or Deposit and either upload a document to scan or enter the transaction data manually.
+            </section>
+            <footer class="mdc-dialog__actions">
+                @using (Html.BeginForm("Create", "Transactions", FormMethod.Post, new { id = "transaction"}))
+                {
+                    @*@Html.AntiForgeryToken()*@
+                    <input id="uploader" type="file" style="display: none" onchange="loadFile(event)" />
+                    @Html.Hidden("HHID", Model.Id)
+                    <a id="isDep" onclick="transType()" name="deposit" value="true" class="mdc-button mdc-button--unelevated filled-button--success mdc-ripple-upgraded" style="transition: all; transition-duration: 1.2s; margin-right: 12px">
+                        Deposit
+                    </a>
+                    <a class="mdc-button mdc-dialog__button mdc-ripple-upgraded" onclick="uploadFile()">
+                        <span class="mdc-button__label">Upload</span>
+                    </a>
+                    <a class="mdc-button mdc-dialog__button mdc-ripple-upgraded">
+                        <span class="mdc-button__label">Manual</span>
+                    </a>
+                }
+            </footer>
+        </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+</div>

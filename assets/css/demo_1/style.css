@@ -25025,10 +25025,10 @@ address p {
 }
 
 .to-do-list .to-do-list-content .to-do-list-item:before {
-  content: "";
-  width: 4px;
-  height: 60px;
-  background: #ffcd00;
+    content: "";
+    width: 4px;
+    height: 60px;
+    background: #1A8FE3;
 }
 
 .to-do-list .to-do-list-content .delete-icon {
