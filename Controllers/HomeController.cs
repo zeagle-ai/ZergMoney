@@ -26,7 +26,11 @@ namespace ZergMoney.Controllers
                 return HttpNotFound();
             }
             household.Accounts = db.PersonalAccounts.Where(h => h.HouseholdId == id).ToList();
-            ViewBag.AccountsForHH = db.PersonalAccounts.Where(h => h.HouseholdId == id);
+            ViewBag.AccountId = new SelectList(household.Accounts, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
+            ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name");
+            ViewBag.Transactions = db.Transactions.Where(i => i.HouseHoldId == id);
+            ViewBag.Users = db.Users.Where(i => i.HouseholdId == id);
             return View(household);
         }
 
@@ -49,7 +53,8 @@ namespace ZergMoney.Controllers
             //If the current user accessing tis page already has a HouseholdId, send them to their dashboard
             if (User.Identity.IsInHousehold())
             {
-                return RedirectToAction("Index", "Home");
+                var id = User.Identity.GetHouseholdId();
+                return RedirectToAction("Index", "Home", new { id });
             }
             
             HouseholdViewModel vm = new HouseholdViewModel();
@@ -63,14 +68,14 @@ namespace ZergMoney.Controllers
                     Invite result = db.Invites.FirstOrDefault(i => i.HHToken == code);
                     
                     vm.IsJoinHouse = true;
-                    vm.HHID = result.HouseholdId;
+                    vm.HouseHoldId = result.HouseholdId;
                     vm.HHName = result.Household.Name;
                     
                     //Set USED flag to true for this invite                  
                     result.HasBeenUsed = true;
                     db.SaveChanges();
 
-                    return RedirectToAction("InvRegister", "Account", new { HHID = vm.HHID });  
+                    return RedirectToAction("InvRegister", "Account", new { HouseholdId = vm.HouseHoldId, Email = result.Email });  
                 }
                 else
                 {

@@ -23,6 +23,7 @@ namespace ZergMoney.Models
     public class BudgetItem
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public int CategoryId { get; set; }
         public int BudgetId { get; set; }
         public decimal Amount { get; set; }
@@ -58,7 +59,6 @@ namespace ZergMoney.Models
         public virtual ICollection<ApplicationUser> Members { get; set; }
         public virtual ICollection<PersonalAccount> Accounts { get; set; }
         public virtual ICollection<Budget> Budgets { get; set; }
-
     }
 
     public class Invite
@@ -112,11 +112,12 @@ namespace ZergMoney.Models
     {
         public int Id { get; set; }
         public int AccountId { get; set; }
+        public int HouseHoldId { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public decimal Amount { get; set; }
         [Display(Name = "Credit")]
-        public bool Type { get; set; }
+        public string Deposit { get; set; }
         public bool Void { get; set; }
         public int CategoryId { get; set; }
         [Display(Name = "Entered By")]

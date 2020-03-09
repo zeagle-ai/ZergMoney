@@ -1,15 +1,17 @@
 ﻿using IronOcr;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using ZergMoney.Models;
 
 namespace ZergMoney.Helper
 {
     public class TR
     {
-        public OcrResult ReadText(string imgPath)
+        public OcrResult ReadText(Image img)
         {
             var Ocr = new AdvancedOcr()
             {
@@ -26,12 +28,12 @@ namespace ZergMoney.Helper
                 ColorDepth = 4
             };
 
-            var result = Ocr.Read(HttpRuntime.AppDomainAppPath + imgPath);
+            var result = Ocr.Read(img);
 
             return (result);
         }
 
-        public string[] Scan(string textGroup)
+        public Transaction Scan(string textGroup)
         {
             string date = @"(0?[1-9]|1[0-2])[\/](0?[1-9]|[12]\d|3[01])[\/](19|20)\d{2}";
             string date1 = @"(0?[1-9]|1[0-2])[\-](0?[1-9]|[12]\d|3[01])[\-](19|20)\d{2}";
@@ -40,32 +42,21 @@ namespace ZergMoney.Helper
             Match FoundDate1 = Regex.Match(textGroup, date1);
             Match FoundTotal = Regex.Match(textGroup, total);
 
-            bool IsDeposit = textGroup.IndexOf("deposit", StringComparison.OrdinalIgnoreCase) >= 0;
-            var listOfDTT = new List<string>();
-            if (IsDeposit)
-            {
-                listOfDTT.Add("true");
-            }
-            else
-            {
-                listOfDTT.Add("false");
-            }
+            Transaction trans = new Transaction();
             if(FoundDate != null)
             {
-                var addedDate = FoundDate.ToString();
-                listOfDTT.Add(addedDate);
+                trans.Date = DateTime.Parse(FoundDate.ToString());  
             }
             if(FoundDate1 != null && FoundDate == null)
             {
-                var addedDate = FoundDate1.ToString();
-                listOfDTT.Add(addedDate);
+                trans.Date = DateTime.Parse(FoundDate1.ToString());
             }
             if(FoundTotal != null)
             {
-                var addedTotal = FoundTotal.ToString();
-                listOfDTT.Add(addedTotal);
+                var newTotal = FoundTotal.ToString().Remove(0,1);
+                trans.Amount = decimal.Parse(newTotal);
             }
-            return listOfDTT.ToArray();
+            return trans;
         }
     }
 }

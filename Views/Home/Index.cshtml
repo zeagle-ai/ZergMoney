@@ -1,4 +1,5 @@
 ﻿@model ZergMoney.Models.Household
+@{ var budgetNum = 2; var budgetItemCount = 0; var AccountNum = 2; var AccountItemCount = 0;}
 
 <div class="mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
@@ -9,15 +10,23 @@
                     <div class="to-do-list-content">
                         @foreach (var account in Model.Accounts)
                         {
-                            <div class="to-do-list-item">
-                                <div class="ml-3">
-                                    <h5 class="mb-0 font-weight-medium">@account.Name</h5>
-                                    <p class="tx-12 text-muted mb-0">@account.InstitutionName</p>
+                            if(AccountItemCount < AccountNum)
+                            {
+                                <div class="to-do-list-item">
+                                    <div class="ml-3">
+                                        <h5 class="mb-0 font-weight-medium">@account.Name</h5>
+                                        <p class="tx-12 text-muted mb-0">@account.InstitutionName</p>
+                                    </div>
+                                    <div class="ml-auto mr-3">
+                                        @account.Balance
+                                    </div>
                                 </div>
-                                <div class="ml-auto mr-3">
-                                    @account.Balance
-                                </div>
-                            </div>
+                                AccountItemCount++;
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                         <div style="padding-bottom: 10px; margin-bottom: 50px">
                             <div class="menu-button-container" style="float: right">
@@ -46,19 +55,48 @@
                 <h6 class="card-title card-padding pb-0">Bills</h6>
                 <div class="content content--active">
                     <div class="to-do-list-content">
-                        <div class="to-do-list-item">
-                            <div class="ml-3">
-                                <h5 class="mb-0 font-weight-medium">House Payment</h5>
-                                <p class="tx-12 text-muted mb-0">Conrex</p>
-                            </div>
-                            <div class="ml-auto mr-3">
-                                $ 1625.00
-                            </div>
-                        </div>
+                        @foreach (var budget in Model.Budgets)
+                        {
+                            if (budget.HouseholdId == Model.Id)
+                            {
+                                foreach (var item in budget.BudgetItems)
+                                {
+                                    if (budget.Id == item.BudgetId && budgetItemCount < budgetNum)
+                                    {
+                                        <div class="to-do-list-item">
+                                            <div class="ml-3">
+                                                <h5 class="mb-0 font-weight-medium">@item.Name</h5>
+                                                <p class="tx-12 text-muted mb-0">@budget.Name</p>
+                                            </div>
+                                            <div class="ml-auto mr-3">
+                                                @item.Amount
+                                            </div>
+                                        </div>
+                                        budgetItemCount++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
                         <div style="padding-bottom: 10px; margin-bottom: 50px">
-                            <button class="mdc-button icon-button mdc-button--raised mdc-ripple-upgraded" style="float: right; margin-top: 5px">
-                                <i class="material-icons mdc-button__icon">add</i>
-                            </button>
+                            <div class="menu-button-container" style="float: right">
+                                <button class="mdc-button mdc-menu-button icon-button mdc-button--raised mdc-ripple-upgraded" style="float: right; margin-top: 5px">
+                                    <i class="material-icons mdc-button__icon">add</i>
+                                </button>
+                                <div class="mdc-menu mdc-menu-surface" tabindex="-1" id="demo-menu" style="transform-origin: left bottom; left: 0px; bottom: 36px; max-height: 749px;">
+                                    <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical">
+                                        <li class="mdc-list-item" role="menuitem" tabindex="-1">
+                                            <a data-toggle="dialog" target-dialog="mdc-dialog-budget"><h6 class="item-subject font-weight-normal">Add Budget</h6></a>
+                                        </li>
+                                        <li class="mdc-list-item" role="menuitem" tabindex="-1">
+                                            <a data-toggle="dialog" target-dialog="mdc-dialog-bills"><h6 class="item-subject font-weight-normal">Add Bill</h6></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                             <button class="mdc-button mdc-ripple-upgraded" style="float: right; margin-top: 5px">SEE ALL</button>
                         </div>
                     </div>
@@ -87,11 +125,74 @@
                     </button>
                 }
                 <h6 class="card-sub-title">Current Members</h6>
+                @foreach (var mem in ViewBag.Users)
+                {
+                    <span>@mem.FullName</span>
+                }
             </div>
         </div>
     </div>
 </div>
-
+<div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+            <div class="mdc-card p-0">
+                <h6 class="card-title card-padding pb-0">Transactions</h6>
+                <div class="content content--active" style="margin-left: 30px; margin-right: 30px">
+                    <table class="table table-hoverable" id="trans">
+                        <thead>
+                            <tr>
+                                <th>
+                                    For
+                                </th>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Account
+                                </th>
+                                <th>
+                                    Type
+                                </th>
+                                <th>
+                                    Amount
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach (var trans in ViewBag.Transactions)
+                                {
+                                    <td>
+                                        @trans.Description
+                                    </td>
+                                    <td>
+                                        @trans.Date.ToString("dddd, dd MMMM yyyy")
+                                    </td>
+                                    <td>
+                                        @foreach (var acc in Model.Accounts)
+                                        {
+                                            if (trans.AccountId == acc.Id)
+                                            {
+                                                @acc.Name
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @trans.Deposit
+                                    </td>
+                                    <td>
+                                        @Math.Abs(trans.Amount)
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="mdc-dialog-default" class="mdc-dialog" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">
     <div class="mdc-dialog__container">
         <div class="mdc-dialog__surface">
@@ -100,16 +201,29 @@
                     Select Account and Add Transaction
                 </h3>
             </header>
-            @using (Html.BeginForm("Create", "Transactions", FormMethod.Post, new { id = "transaction"}))
+            @using (Html.BeginForm("Create", "Transactions", FormMethod.Post, new { id = "transaction", role = "form", enctype = "Multipart/form-data" }))
             {
+                @Html.AntiForgeryToken()
                 <section id="mdc-dialog-default-description" class="mdc-dialog__content">
-                    Select the correct account, then choose Withdrawal or Deposit and either upload a document to scan or enter the transaction data manually.
+                    <span style="margin-bottom: 10px">Select the correct account, then choose Withdrawal or Deposit and either upload a document to scan or enter the transaction data manually.<br /></span>
+                    <span style="padding-right: 10px">Account: </span>@Html.DropDownList("AccountId", null, new { @class = "mdc-select", style = "padding-right: 15px;" })
+                    <span style="padding-right: 10px">Category: </span>@Html.DropDownList("CategoryId", null, new { @class = "mdc-select" })
+                    <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 10px">
+                        <input class="mdc-text-field__input" id="text-field-hero-input" name="Description">
+                        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch" style="">
+                                <label for="text-field-hero-input" class="mdc-floating-label" style="">Description</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
                 </section>
                 <footer class="mdc-dialog__actions">
-                    @*@Html.AntiForgeryToken()*@
-                    <input id="uploader" type="file" style="display: none" onchange="loadFile(event)"  />
-                    @Html.Hidden("HHID", Model.Id)
-                    <a id="isDep" onclick="transType()" name="deposit" value="true" class="mdc-button mdc-button--unelevated filled-button--success mdc-ripple-upgraded" style="transition: all; transition-duration: 1.2s; margin-right: 12px">
+                    <input id="uploader" type="file" name="image" style="display: none" onchange="formSub()" />
+                    @Html.Hidden("HouseHoldId", Model.Id)
+                    <input name="Deposit" id="depp" value="Deposit" type="hidden" />
+                    <a id="isDep" onclick="transType()" value="true" class="mdc-button mdc-button--unelevated filled-button--success mdc-ripple-upgraded" style="transition: all; transition-duration: 1.2s; margin-right: 12px">
                         Deposit
                     </a>
                     <a class="mdc-button mdc-dialog__button mdc-ripple-upgraded" onclick="uploadFile()">
@@ -136,40 +250,41 @@
             @using (Html.BeginForm("Create", "PersonalAccounts", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
-            <section id="mdc-dialog-default-description" class="mdc-dialog__content">
-                <div class="mdc-text-field mdc-text-field--outlined">
-                    <input class="mdc-text-field__input" id="text-field-hero-input" name="Name">
-                    <div class="mdc-notched-outline mdc-notched-outline--upgraded">
-                        <div class="mdc-notched-outline__leading"></div>
-                        <div class="mdc-notched-outline__notch" style="">
-                            <label for="text-field-hero-input" class="mdc-floating-label" style="">Account Name</label>
+                <section id="mdc-dialog-default-description" class="mdc-dialog__content">
+                    <span>Enter Balance with no commas<br /></span>
+                    <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 25px">
+                        <input class="mdc-text-field__input" id="text-field-hero-input" name="Name">
+                        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch" style="">
+                                <label for="text-field-hero-input" class="mdc-floating-label" style="">Account Name</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
                         </div>
-                        <div class="mdc-notched-outline__trailing"></div>
                     </div>
-                </div>
-                <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 10px">
-                    <input class="mdc-text-field__input" id="text-field-hero-input" name="InstitutionName">
-                    <div class="mdc-notched-outline mdc-notched-outline--upgraded">
-                        <div class="mdc-notched-outline__leading"></div>
-                        <div class="mdc-notched-outline__notch" style="">
-                            <label for="text-field-hero-input" class="mdc-floating-label" style="">Bank Name</label>
+                    <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 25px">
+                        <input class="mdc-text-field__input" id="text-field-hero-input" name="InstitutionName">
+                        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch" style="">
+                                <label for="text-field-hero-input" class="mdc-floating-label" style="">Bank Name</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
                         </div>
-                        <div class="mdc-notched-outline__trailing"></div>
                     </div>
-                </div>
-                <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 10px">
-                    <input class="mdc-text-field__input" id="text-field-hero-input" name="Balance">
-                    <div class="mdc-notched-outline mdc-notched-outline--upgraded">
-                        <div class="mdc-notched-outline__leading"></div>
-                        <div class="mdc-notched-outline__notch" style="">
-                            <label for="text-field-hero-input" class="mdc-floating-label" style="">Balance</label>
+                    <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 25px">
+                        <input class="mdc-text-field__input" id="text-field-hero-input" name="Balance">
+                        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch" style="">
+                                <label for="text-field-hero-input" class="mdc-floating-label" style="">Balance</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
                         </div>
-                        <div class="mdc-notched-outline__trailing"></div>
                     </div>
-                </div>
-            </section>
+                </section>
                 <footer class="mdc-dialog__actions">
-                    @Html.Hidden("HHID", Model.Id)
+                    @Html.Hidden("HouseHoldId", Model.Id)
                     <button class="mdc-button mdc-dialog__button mdc-ripple-upgraded" type="submit">
                         <span class="mdc-button__label">Create</span>
                     </button>
@@ -179,3 +294,95 @@
     </div>
     <div class="mdc-dialog__scrim"></div>
 </div>
+<div id="mdc-dialog-budget" class="mdc-dialog" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">
+    <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+            <header class="mdc-dialog__title">
+                <h3 id="mdc-dialog-default-label" class="mdc-dialog__header__title">
+                    Add Account
+                </h3>
+            </header>
+            @using (Html.BeginForm("Create", "Budgets", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <section id="mdc-dialog-default-description" class="mdc-dialog__content">
+                    <span>Enter Balance with no commas<br /></span>
+                    <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 25px">
+                        <input class="mdc-text-field__input" id="text-field-hero-input" name="Name">
+                        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch" style="">
+                                <label for="text-field-hero-input" class="mdc-floating-label" style="">Budget Name</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="mdc-dialog__actions">
+                    @Html.Hidden("HouseHoldId", Model.Id)
+                    <button class="mdc-button mdc-dialog__button mdc-ripple-upgraded" type="submit">
+                        <span class="mdc-button__label">Create</span>
+                    </button>
+                </footer>
+            }
+        </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+</div>
+<div id="mdc-dialog-bills" class="mdc-dialog" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">
+    <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+            <header class="mdc-dialog__title">
+                <h3 id="mdc-dialog-default-label" class="mdc-dialog__header__title">
+                    Add Account
+                </h3>
+            </header>
+            @using (Html.BeginForm("Create", "BudgetItems", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <section id="mdc-dialog-default-description" class="mdc-dialog__content">
+                    <span>Enter Balance with no commas<br /></span>
+                    <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 25px">
+                        <input class="mdc-text-field__input" id="text-field-hero-input" name="Name">
+                        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch" style="">
+                                <label for="text-field-hero-input" class="mdc-floating-label" style="">Bill Name</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-text-field mdc-text-field--outlined" style="margin-top: 25px">
+                        <input class="mdc-text-field__input" id="text-field-hero-input" name="Amount">
+                        <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch" style="">
+                                <label for="text-field-hero-input" class="mdc-floating-label" style="">Bill Amount</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
+                    <span style="padding-right: 10px">Budget: </span>@Html.DropDownList("BudgetId", null, new { @class = "mdc-select" })
+                    <span style="padding-right: 10px">Category: </span>@Html.DropDownList("CategoryId", null, new { @class = "mdc-select" })
+                </section>
+                <footer class="mdc-dialog__actions">
+                    @Html.Hidden("HouseHoldId", Model.Id)
+                    <button class="mdc-button mdc-dialog__button mdc-ripple-upgraded" type="submit">
+                        <span class="mdc-button__label">Create</span>
+                    </button>
+                </footer>
+            }
+        </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+</div>
+
+@section Scripts {
+    <script src="~/assets/js/jquery.dataTables.js"></script>
+    <script src="~/assets/js/dataTables.bootstrap4.js"></script>
+    <script>
+        $(function () {
+            $("#trans").DataTable();
+        });
+    </script>
+}

@@ -48,13 +48,13 @@ namespace ZergMoney.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,HouseholdId")] Budget budget)
+        public ActionResult Create([Bind(Include = "Id,Name,HouseholdId")] Budget budget, int HouseHoldId)
         {
             if (ModelState.IsValid)
             {
                 db.Budgets.Add(budget);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home", new { id = HouseHoldId });
             }
 
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budget.HouseholdId);

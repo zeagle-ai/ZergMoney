@@ -8,7 +8,7 @@ namespace ZergMoney.Models
 {
     public class HouseholdViewModel
     {
-        public int? HHID { get; set; }
+        public int? HouseHoldId { get; set; }
         public string HHName { get; set; }
         public bool IsJoinHouse { get; set; }
         public ApplicationUser Member { get; set; }

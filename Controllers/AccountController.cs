@@ -222,12 +222,13 @@ namespace ZergMoney.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult InvRegister(int HHID)
+        public ActionResult InvRegister(int HouseHoldId, string Email)
         {
             RegisterViewModel model = new RegisterViewModel
             {
-                HHID = HHID,
-                HHName = db.Households.Find(HHID).Name
+                Email = Email,
+                HouseHoldId = HouseHoldId,
+                HHName = db.Households.Find(HouseHoldId).Name
             };
 
             return View(model);
@@ -240,12 +241,12 @@ namespace ZergMoney.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, DisplayName = model.DisplayName };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, DisplayName = model.DisplayName, HouseholdId = model.HouseHoldId };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home", new { id = model.HouseHoldId });
                 }
                 AddErrors(result);
             }

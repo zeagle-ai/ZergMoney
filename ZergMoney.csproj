@@ -197,6 +197,8 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\css\custom.css" />
+    <Content Include="assets\css\dataTables.bootstrap4.css" />
     <Content Include="assets\css\demo_1\style.css" />
     <Content Include="assets\fonts\roboto\Roboto-Bold.svg" />
     <Content Include="assets\fonts\roboto\Roboto-Light.svg" />
@@ -231,9 +233,11 @@
     <Content Include="assets\js\context-menu.js" />
     <Content Include="assets\js\custom.js" />
     <Content Include="assets\js\dashboard.js" />
+    <Content Include="assets\js\dataTables.bootstrap4.js" />
     <Content Include="assets\js\dialog.js" />
     <Content Include="assets\js\dragula.js" />
     <Content Include="assets\js\ion-range-slider.js" />
+    <Content Include="assets\js\jquery.dataTables.js" />
     <Content Include="assets\js\jquery.flot.js" />
     <Content Include="assets\js\material.js" />
     <Content Include="assets\js\misc.js" />

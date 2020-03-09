@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -51,23 +54,55 @@ namespace ZergMoney.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,AccountId,Description,Date,Amount,Type,Void,CategoryId,EnteredById,Reconciled,ReconciledAmount,IsDeleted")] Transaction transaction, string imagePath)
+        public ActionResult Create([Bind(Include = "Id,AccountId,CategoryId,Description,HouseHoldId,Void,IsDeleted")] Transaction transaction, HttpPostedFileBase image, string Deposit)
         {
             if (ModelState.IsValid)
             {
-                db.Transactions.Add(transaction);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (Deposit == "Deposit")
+                {
+                    TR tr = new TR();
+                    var fileName = Path.GetFileName(image.FileName);
+                    var userIdString = User.Identity.GetUserId().ToString();
+                    Directory.CreateDirectory(HttpRuntime.AppDomainAppPath + "/Uploads/" + userIdString);
+                    image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/" + userIdString + "/"), fileName));
+                    Image img = Image.FromStream(image.InputStream);
+                    var result = tr.ReadText(img).Text;
+                    var DTTotal = tr.Scan(result);
+                    transaction.EnteredById = User.Identity.GetUserId();
+                    transaction.Reconciled = true;
+                    transaction.Date = DTTotal.Date;
+                    transaction.Amount = DTTotal.Amount;
+                    transaction.Deposit = "Deposit";
+                    db.Transactions.Add(transaction);
+                    var acc = db.PersonalAccounts.FirstOrDefault(a => a.Id == transaction.AccountId);
+                    acc.Balance += transaction.Amount;
+                    acc.ReconciledBalance += transaction.Amount;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Home", new { id = transaction.HouseHoldId });
+                }
+                else
+                {
+                    TR tr = new TR();
+                    var fileName = Path.GetFileName(image.FileName);
+                    var userIdString = User.Identity.GetUserId().ToString();
+                    Directory.CreateDirectory(HttpRuntime.AppDomainAppPath + "/Uploads/" + userIdString);
+                    image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/" + userIdString + "/"), fileName));
+                    Image img = Image.FromStream(image.InputStream);
+                    var result = tr.ReadText(img).Text;
+                    var DTTotal = tr.Scan(result);
+                    transaction.EnteredById = User.Identity.GetUserId();
+                    transaction.Reconciled = true;
+                    transaction.Date = DTTotal.Date;
+                    transaction.Amount = -Math.Abs(DTTotal.Amount);
+                    transaction.Deposit = "Withdrawal";
+                    db.Transactions.Add(transaction);
+                    var acc = db.PersonalAccounts.FirstOrDefault(a => a.Id == transaction.AccountId);
+                    acc.Balance += transaction.Amount;
+                    acc.ReconciledBalance += transaction.Amount;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Home", new { id = transaction.HouseHoldId });
+                }
             }
-
-            TR tr = new TR();
-            var result = tr.ReadText(imagePath).Text;
-
-            var DTTotal = tr.Scan(result);
-            var dep = DTTotal[0];
-            var date = DTTotal[1];
-            var total = DTTotal[2];
-
 
             ViewBag.AccountId = new SelectList(db.PersonalAccounts, "Id", "Name", transaction.AccountId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);

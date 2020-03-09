@@ -92,7 +92,6 @@ namespace ZergMoney.Models
         [Display(Name = "Display Name")]
         public string DisplayName { get; set; }
 
-        [Required]
         [StringLength(25, ErrorMessage = "Household Name must be at least 6 characters long.", MinimumLength = 6)]
         [Display(Name = "Household Name")]
         public string HouseHoldName { get; set; }
@@ -102,7 +101,7 @@ namespace ZergMoney.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public int HHID { get; set; }
+        public int HouseHoldId { get; set; }
     }
 
     public class ResetPasswordViewModel

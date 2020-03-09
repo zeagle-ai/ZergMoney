@@ -1,10 +1,11 @@
 ﻿@model ZergMoney.Models.RegisterViewModel
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("InvRegister", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
 
-    @Html.Hidden("HHID", Model.HHID)
+    @Html.Hidden("HouseHoldId", Model.HouseHoldId)
+    @Html.Hidden("Email", Model.Email)
 
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">

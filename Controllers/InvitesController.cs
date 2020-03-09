@@ -150,7 +150,7 @@ namespace ZergMoney.Controllers
             db.Invites.Add(model);
             db.SaveChanges();
             
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { id = model.HouseholdId });
         }
         
         public ActionResult Leavehousehold()
