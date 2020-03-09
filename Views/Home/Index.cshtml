@@ -191,6 +191,18 @@
                 </div>
             </div>
         </div>
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3 mdc-layout-grid__cell--span-4-tablet">
+            <div class="mdc-card">
+                <h6 class="card-title">Budget</h6>
+                <canvas id="doughnutChartA"></canvas>
+            </div>
+        </div>
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3 mdc-layout-grid__cell--span-4-tablet">
+            <div class="mdc-card">
+                <h6 class="card-title">Accounts</h6>
+                <canvas id="doughnutChartB"></canvas>
+            </div>
+        </div>
     </div>
 </div>
 <div id="mdc-dialog-default" class="mdc-dialog" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">
@@ -384,5 +396,86 @@
         $(function () {
             $("#trans").DataTable();
         });
+    </script>
+    <script>
+        var doughnutPieData = {
+        datasets: [{
+            data: [30, 40, 30],
+            backgroundColor: [
+            'rgba(255, 66, 15, 0.8)',
+            'rgba(0, 187, 221, 0.8)',
+            'rgba(255, 193, 7, 0.8)',
+            'rgba(0, 182, 122, 0.8)',
+            'rgba(153, 102, 255, 0.8)',
+            'rgba(255, 159, 64, 0.8)'
+            ],
+            borderColor: [
+            'rgba(255, 66, 15,1)',
+            'rgba(0, 187, 221, 1)',
+            'rgba(255, 193, 7, 1)',
+            'rgba(0, 182, 122, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+            ],
+        }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Red',
+                'Blue',
+                'Yellow',
+            ]
+        };
+        var doughnutPieDataA = {
+        datasets: [{
+            data: [30, 40, 30],
+            backgroundColor: [
+            'rgba(255, 66, 15, 0.8)',
+            'rgba(0, 187, 221, 0.8)',
+            'rgba(255, 193, 7, 0.8)',
+            'rgba(0, 182, 122, 0.8)',
+            'rgba(153, 102, 255, 0.8)',
+            'rgba(255, 159, 64, 0.8)'
+            ],
+            borderColor: [
+            'rgba(255, 66, 15,1)',
+            'rgba(0, 187, 221, 1)',
+            'rgba(255, 193, 7, 1)',
+            'rgba(0, 182, 122, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+            ],
+        }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Red',
+                'Blue',
+                'Yellow',
+            ]
+        };
+        var doughnutPieOptions = {
+            responsive: true,
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
+        if ($("#doughnutChartA").length) {
+            var doughnutChartCanvas = $("#doughnutChartA").get(0).getContext("2d");
+            var doughnutChart = new Chart(doughnutChartCanvas, {
+                type: 'doughnut',
+                data: doughnutPieData,
+                options: doughnutPieOptions
+            });
+        }
+        if ($("#doughnutChartB").length) {
+            var doughnutChartCanvas = $("#doughnutChartB").get(0).getContext("2d");
+            var doughnutChart = new Chart(doughnutChartCanvas, {
+                type: 'doughnut',
+                data: doughnutPieDataA,
+                options: doughnutPieOptions
+            });
+        }
     </script>
 }
